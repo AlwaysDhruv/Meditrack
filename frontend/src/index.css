@@ -1,0 +1,68 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GLOBAL ROOT VARIABLES */
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Remove Vite's dark/light forcing */
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #213547;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* REMOVE DEFAULT BLUE LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* BODY FIX — important */
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  background: none !important;
+}
+
+/* Remove Vite demo centering */
+body {
+  display: block;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1 {
+  font-size: 3em;
+  line-height: 1.1;
+}
+
+/* Buttons reset */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}

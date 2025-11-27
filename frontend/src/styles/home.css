@@ -1,0 +1,137 @@
+/* GENERAL */
+.home {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f473e, #012821);
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAVBAR */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 50px;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav a {
+  margin-left: 20px;
+  font-size: 16px;
+  color: #d6fff3;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.nav a:hover {
+  color: white;
+  text-shadow: 0 0 8px #a8ffef;
+}
+
+/* HERO SECTION */
+.hero {
+  text-align: center;
+  margin-top: 80px;
+  padding: 0 20px;
+}
+
+.hero h1 {
+  font-size: 52px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 20px;
+  max-width: 650px;
+  margin: auto;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* HERO BUTTONS */
+.hero-buttons {
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 14px 34px;
+  margin: 0 10px;
+  border-radius: 8px;
+  font-size: 18px;
+  text-decoration: none;
+  border: 2px solid #d6fff3;
+  transition: all 0.28s ease;
+  cursor: pointer;
+}
+
+.primary {
+  background: #d6fff3;
+  color: #00392f;
+}
+
+.primary:hover {
+  background: white;
+}
+
+.secondary {
+  background: transparent;
+  color: #d6fff3;
+}
+
+.secondary:hover {
+  color: #00392f;
+  background: #d6fff3;
+}
+
+/* FEATURES SECTION */
+.features {
+  display: flex;
+  justify-content: center;
+  margin-top: 90px;
+  gap: 40px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 30px;
+  border-radius: 14px;
+  width: 290px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.feature-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #d6fff3;
+}
+
+.feature-card p {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+}
+
+/* FOOTER */
+.footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 20px;
+  opacity: 0.8;
+  font-size: 14px;
+}

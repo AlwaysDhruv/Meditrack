@@ -1,0 +1,719 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
+:root {
+  /* Core Colors */
+  --doc-bg: #f8fdfb;         /* Lightest Mint/White */
+  --doc-sidebar-bg: #01372a; /* Dark Green */
+  --doc-sidebar-text: #d6fff3;
+  --doc-text: #003a2d;       /* Dark Text */
+  --doc-text-muted: #55706a;
+
+  /* Accents */
+  --doc-green: #03c28b;
+  --doc-green-dark: #00261c;
+  --doc-blue: #4ea9ff;
+  --doc-blue-dark: #00243b;
+  --doc-red: #ff6464;
+  --doc-red-hover: #d93838;
+
+  /* Cards & UI */
+  --doc-card-bg: #ffffff;
+  --doc-border: #e8f1ee;
+  --doc-shadow: rgba(0, 0, 0, 0.06);
+  --doc-shadow-hover: rgba(0, 0, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--doc-bg);
+  color: var(--doc-text);
+}
+
+/* =========================================
+   2. MAIN LAYOUT CONTAINER
+   ========================================= */
+.doctor-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--doc-bg);
+}
+
+/* =========================================
+   3. SIDEBAR AREA
+   ========================================= */
+.doctor-sidebar {
+  width: 250px;
+  background: var(--doc-sidebar-bg);
+  color: var(--doc-sidebar-text);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  position: fixed; /* Optional: Fix sidebar on scroll */
+  height: 100vh;
+  left: 0;
+  top: 0;
+}
+
+/* Logo/Header */
+.doctor-logo {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 35px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation Links */
+.doctor-link {
+  color: var(--doc-sidebar-text);
+  text-decoration: none;
+  display: block;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.25s ease;
+}
+
+.doctor-link:hover,
+.doctor-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(3px);
+}
+
+/* Special Highlight Buttons */
+.doctor-link.green {
+  background: var(--doc-green);
+  color: var(--doc-green-dark);
+  font-weight: 600;
+  margin-top: 5px;
+}
+.doctor-link.green:hover {
+  background: #02a878;
+}
+
+.doctor-link.blue {
+  background: var(--doc-blue);
+  color: var(--doc-blue-dark);
+  font-weight: 600;
+}
+.doctor-link.blue:hover {
+  background: #3d91e0;
+}
+
+/* Divider */
+.doctor-divider {
+  border-bottom: 1px solid #0c6652;
+  opacity: 0.5;
+  margin: 20px 0;
+}
+
+/* Bottom Section (Logout) */
+.doctor-bottom {
+  margin-top: auto;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--doc-red);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn:hover {
+  background: var(--doc-red-hover);
+}
+
+/* =========================================
+   4. MAIN CONTENT AREA
+   ========================================= */
+.doctor-content {
+  flex: 1;
+  margin-left: 250px; /* Offset for fixed sidebar */
+  padding: 40px;
+  background: var(--doc-bg);
+  overflow-y: auto;
+}
+
+/* Page Headers */
+.doc-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--doc-text);
+}
+
+.doc-subtitle {
+  font-size: 16px;
+  color: var(--doc-text-muted);
+  margin-bottom: 35px;
+}
+
+/* =========================================
+   5. DASHBOARD STATISTICS CARDS
+   ========================================= */
+.doc-stats-row {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.doc-stat-card {
+  flex: 1;
+  min-width: 240px;
+  background: var(--doc-card-bg);
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid var(--doc-border);
+  box-shadow: 0 4px 20px var(--doc-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.doc-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: var(--doc-green);
+}
+
+.doc-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--doc-shadow-hover);
+}
+
+.doc-stat-card h3 {
+  font-size: 36px;
+  margin-bottom: 8px;
+  color: var(--doc-text);
+}
+
+.doc-stat-card p {
+  color: var(--doc-text-muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* =========================================
+   6. QUICK ACTIONS
+   ========================================= */
+.doc-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--doc-text);
+}
+
+.doc-actions-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.doc-action-card {
+  flex: 1;
+  min-width: 200px;
+  background: var(--doc-card-bg);
+  padding: 25px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--doc-text);
+  border: 1px solid var(--doc-border);
+  transition: 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.doc-action-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--doc-green);
+  box-shadow: 0 6px 20px var(--doc-shadow);
+  color: var(--doc-green-dark);
+}
+
+.doc-action-card .icon {
+  font-size: 32px;
+  color: var(--doc-green);
+}
+
+/* =========================================
+   7. LISTS & TABLES (Appointments)
+   ========================================= */
+.doc-list-container {
+  background: var(--doc-card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--doc-border);
+  padding: 10px;
+  box-shadow: 0 4px 14px var(--doc-shadow);
+}
+
+.doc-list-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--doc-border);
+  transition: 0.2s;
+}
+
+.doc-list-card:last-child {
+  border-bottom: none;
+}
+
+.doc-list-card:hover {
+  background: #f9fffd;
+}
+
+.doc-list-info h4 {
+  font-size: 16px;
+  color: var(--doc-text);
+  margin-bottom: 4px;
+}
+
+.doc-list-info p {
+  font-size: 14px;
+  color: var(--doc-text-muted);
+}
+
+/* Status Badges */
+.status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.upcoming { background: #e0f7fa; color: #006064; }
+.status.pending { background: #fff8e1; color: #ff8f00; }
+.status.cancelled { background: #ffebee; color: #c62828; }
+
+/* =========================================
+   8. RESPONSIVENESS
+   ========================================= */
+@media (max-width: 900px) {
+  .doctor-sidebar {
+    width: 80px;
+    padding: 20px 10px;
+  }
+  
+  .doctor-logo, .doctor-link span, .doctor-bottom span {
+    display: none;
+  }
+  
+  .doctor-link {
+    text-align: center;
+    padding: 15px 0;
+  }
+
+  .doctor-content {
+    margin-left: 80px;
+    padding: 20px;
+  }
+  
+  .doc-stats-row, .doc-actions-row {
+    flex-direction: column;
+  }
+}
+.green-btn:hover {
+  background: #04a876 !important;
+}
+
+.status {
+  padding: 5px 12px;
+  border-radius: 8px;
+  width: fit-content;
+  text-transform: capitalize;
+  margin-top: 10px;
+}
+
+.status.requested { background: #fff5c2; color: #805b00; }
+.status.accepted { background: #ccffe5; color: #005f3a; }
+.status.rejected { background: #ffd4d4; color: #a10000; }
+.status.completed { background: #e0e4ff; color: #2a42c2; }
+/* MATCHING THE PATIENT PANEL BUTTONS */
+.complete-btn {
+  background: #03c28b;
+  color: #002519;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.complete-btn:hover {
+  background: #05e7a8;
+}
+
+.loading-text {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--text);
+}
+
+/* Matching patient appointment layout */
+.doctor-appt-card {
+  border-left: 5px solid #0da88a;
+}
+/* Patient Profile Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 380px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  animation: pop 0.2s ease-in-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.profile-btn {
+  background: #4ea9ff;
+  color: #00243b;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-profile {
+  margin-top: 20px;
+  background: #ff6666;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* PDF Button */
+.pdf-btn {
+  margin-top: 10px;
+  background: #01372a;
+  color: #d6fff3;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+/* ============================================================
+   DOCTOR PATIENTS PAGE — MODERN STYLED TO MATCH GLOBAL THEME
+   ============================================================ */
+
+.page {
+  padding: 40px 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Title + Subtitle */
+.page h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--doc-text);
+}
+
+.page p {
+  color: var(--doc-text-muted);
+  margin-bottom: 25px;
+}
+
+/* ============================================================
+   SEARCH INPUT
+   ============================================================ */
+.search-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--doc-border);
+  background: white;
+  margin-bottom: 25px;
+  font-size: 15px;
+  color: var(--doc-text);
+  box-shadow: 0 3px 10px var(--doc-shadow);
+  transition: 0.25s;
+}
+
+.search-input:focus {
+  border-color: var(--doc-green);
+  outline: none;
+  box-shadow: 0 3px 12px var(--doc-shadow-hover);
+}
+
+/* ============================================================
+   PATIENT LIST
+   ============================================================ */
+.patients-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Patient Card */
+.patient-card {
+  background: var(--doc-card-bg);
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--doc-border);
+  box-shadow: 0 4px 16px var(--doc-shadow);
+  transition: 0.25s ease;
+}
+
+.patient-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px var(--doc-shadow-hover);
+}
+
+/* Patient Header */
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.patient-header h3 {
+  font-size: 20px;
+  color: var(--doc-text);
+}
+
+.patient-header p {
+  font-size: 13px;
+  color: var(--doc-text-muted);
+}
+
+/* Profile Button */
+.profile-btn {
+  background: var(--doc-blue);
+  color: var(--doc-blue-dark);
+  border: none;
+  padding: 10px 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-btn:hover {
+  background: #3d91e0;
+}
+
+/* ============================================================
+   SHOW/HIDE RECORDS BUTTON
+   ============================================================ */
+.details-btn {
+  margin-top: 18px;
+  width: 100%;
+  background: var(--doc-green);
+  color: var(--doc-green-dark);
+  padding: 10px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.details-btn:hover {
+  background: #04a876;
+}
+
+/* ============================================================
+   RECORDS LIST
+   ============================================================ */
+.records-list {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f9fffd;
+  border-radius: 12px;
+  border: 1px solid var(--doc-border);
+}
+
+.records-list h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Record Card */
+.record-card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid var(--doc-border);
+  margin-bottom: 16px;
+  box-shadow: 0 3px 10px var(--doc-shadow);
+  transition: 0.25s;
+}
+
+.record-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 5px 14px var(--doc-shadow-hover);
+}
+
+.record-card h3 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+/* VITALS BOX */
+.vitals-box {
+  margin-top: 10px;
+  background: #effbf8;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--doc-border);
+}
+
+.vitals-grid {
+  display: flex;
+  gap: 25px;
+  font-size: 14px;
+  color: var(--doc-text);
+}
+
+/* PDF Download Button */
+.pdf-btn {
+  margin-top: 14px;
+  background: var(--doc-sidebar-bg);
+  color: var(--doc-sidebar-text);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+.pdf-btn:hover {
+  background: #00261c;
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+.empty {
+  text-align: center;
+  padding: 14px;
+  font-size: 14px;
+  color: var(--doc-text-muted);
+}
+
+/* ============================================================
+   PROFILE MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+}
+
+.profile-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  width: 380px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  animation: modalPop 0.25s ease;
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.close-profile {
+  margin-top: 20px;
+  background: var(--doc-red);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.close-profile:hover {
+  background: var(--doc-red-hover);
+}
+.mail-box {
+  background: var(--card-bg);
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px var(--card-shadow);
+  border: 1px solid var(--border);
+  max-width: 600px;
+  margin-top: 20px;
+}
+
+.label {
+  margin-top: 12px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  display: block;
+}
+
+.input,
+.textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.textarea {
+  min-height: 130px;
+  resize: none;
+}
