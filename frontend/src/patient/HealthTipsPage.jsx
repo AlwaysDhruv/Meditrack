@@ -28,12 +28,15 @@ export default function RecordsPage() {
     temp: ""
   });
 
+  // Get logged in user
+  const user = JSON.parse(localStorage.getItem("meditrack_user"));
+  const isPatient = user.role === "patient";
+
   useEffect(() => {
     loadRecords();
   }, []);
 
   function loadRecords() {
-    const user = JSON.parse(localStorage.getItem("meditrack_user"));
     API.get(`/records/patient/${user.id}`).then(res =>
       setRecords(res.data.records)
     );
@@ -54,25 +57,19 @@ export default function RecordsPage() {
           inList = false;
         }
         html += `<h3 class="chat-heading">${line}</h3>`;
-      }
-
-      else if (line.startsWith("-") || line.startsWith("•")) {
+      } else if (line.startsWith("-") || line.startsWith("•")) {
         if (!inList) {
           html += "<ul class='chat-list'>";
           inList = true;
         }
         html += `<li>${line.replace(/^[-•]\s*/, "")}</li>`;
-      }
-
-      else if (/warning|caution|safety/i.test(line)) {
+      } else if (/warning|caution|safety/i.test(line)) {
         if (inList) {
           html += "</ul>";
           inList = false;
         }
         html += `<p class="chat-warning">${line}</p>`;
-      }
-
-      else {
+      } else {
         if (inList) {
           html += "</ul>";
           inList = false;
@@ -119,10 +116,7 @@ export default function RecordsPage() {
 
       const formatted = formatAIText(res.data.analysis);
 
-      setChatMessages(prev => [
-        ...prev,
-        { sender: "ai", html: formatted }
-      ]);
+      setChatMessages(prev => [...prev, { sender: "ai", html: formatted }]);
     } catch (err) {
       console.error(err);
       setChatMessages(prev => [
@@ -133,9 +127,10 @@ export default function RecordsPage() {
   }
 
   /* ---------------------------------------------------------
-      ADD / EDIT RECORD
+      ADD / EDIT RECORD (ONLY DOCTOR)
   --------------------------------------------------------- */
   function openCreate() {
+    if (isPatient) return;  // block patient
     setIsEdit(false);
     setEditingId(null);
     setForm({ notes: "", prescriptions: "", bp: "", pulse: "", temp: "" });
@@ -143,6 +138,7 @@ export default function RecordsPage() {
   }
 
   function openEdit(rec) {
+    if (isPatient) return; // block patient
     setIsEdit(true);
     setEditingId(rec._id);
     setForm({
@@ -156,6 +152,7 @@ export default function RecordsPage() {
   }
 
   async function deleteRecord(id) {
+    if (isPatient) return; // block patient
     if (!confirm("Delete this record?")) return;
     await API.delete(`/records/${id}`);
     loadRecords();
@@ -163,8 +160,8 @@ export default function RecordsPage() {
 
   async function saveRecord(e) {
     e.preventDefault();
+    if (isPatient) return; // block patient
 
-    const user = JSON.parse(localStorage.getItem("meditrack_user"));
     const data = {
       patientId: user.id,
       notes: form.notes,
@@ -191,7 +188,12 @@ export default function RecordsPage() {
 
       <div className="page-header">
         <h1>Health Records</h1>
-        <button className="book-btn" onClick={openCreate}>+ Add Record</button>
+
+        {!isPatient && (
+          <button className="book-btn" onClick={openCreate}>
+            + Add Record
+          </button>
+        )}
       </div>
 
       {/* RECORDS LIST */}
@@ -203,17 +205,16 @@ export default function RecordsPage() {
               <h3>{new Date(rec.createdAt).toLocaleDateString()}</h3>
 
               <div className="record-actions">
-                <button className="ai-btn" onClick={() => analyzeRecord(rec)}>Ask AI</button>
+                <button className="ai-btn" onClick={() => analyzeRecord(rec)}>
+                  Ask AI
+                </button>
 
                 <button
                   className="chat-btn"
                   onClick={() => {
                     setChatRecord(rec);
                     setChatMessages([
-                      {
-                        sender: "ai",
-                        text: "Ask me anything about this record!"
-                      }
+                      { sender: "ai", text: "Ask me anything about this record!" }
                     ]);
                     setChatModal(true);
                   }}
@@ -221,9 +222,17 @@ export default function RecordsPage() {
                   Chat
                 </button>
 
-                <button className="edit-btn" onClick={() => openEdit(rec)}>Edit</button>
+                {!isPatient && (
+                  <>
+                    <button className="edit-btn" onClick={() => openEdit(rec)}>
+                      Edit
+                    </button>
 
-                <button className="delete-btn" onClick={() => deleteRecord(rec._id)}>Delete</button>
+                    <button className="delete-btn" onClick={() => deleteRecord(rec._id)}>
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -295,6 +304,66 @@ export default function RecordsPage() {
               />
               <button className="send-btn" onClick={sendChatMessage}>Send</button>
             </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ----------------------- ADD/EDIT MODAL ----------------------- */}
+      {showModal && !isPatient && (
+        <div className="modal-overlay">
+          <div className="modal-box large">
+
+            <h2>{isEdit ? "Edit Record" : "Add Health Record"}</h2>
+
+            <form onSubmit={saveRecord}>
+              <label>Notes</label>
+              <textarea
+                value={form.notes}
+                onChange={e => setForm({ ...form, notes: e.target.value })}
+                required
+              />
+
+              <label>Prescriptions (comma separated)</label>
+              <input
+                value={form.prescriptions}
+                onChange={e => setForm({ ...form, prescriptions: e.target.value })}
+              />
+
+              <label>Vitals</label>
+              <div className="vitals-grid">
+                <input
+                  placeholder="BP"
+                  value={form.bp}
+                  onChange={e => setForm({ ...form, bp: e.target.value })}
+                />
+                <input
+                  placeholder="Pulse"
+                  value={form.pulse}
+                  onChange={e => setForm({ ...form, pulse: e.target.value })}
+                />
+                <input
+                  placeholder="Temp"
+                  value={form.temp}
+                  onChange={e => setForm({ ...form, temp: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+
+                <button type="submit" className="save-btn">
+                  {isEdit ? "Update" : "Save Record"}
+                </button>
+              </div>
+
+            </form>
 
           </div>
         </div>
